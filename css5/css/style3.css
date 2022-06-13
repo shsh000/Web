@@ -1,0 +1,77 @@
+/* css/style3.css */
+body {
+    font: 14px "맑은 고딕";
+}
+.container {
+    /* border: 1px solid black; */
+    width: 960px;
+    margin: 0 auto;
+}
+header {
+    position: relative;
+    height: 280px;
+    font-size: 3em; /* em : 기본 폰트 배의 크기 (3배크기) */
+    background-image: url(../images/bg.png);
+    background-position: left top;
+    background-repeat: no-repeat;
+}
+header > h1 {
+    position: absolute;
+    right: 20px;
+    bottom: 50px;
+    font-size: 1.5em;
+    color: white;
+}
+header > h2 {
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
+    font-size: 1em;
+    color: white;
+}
+nav.navi {
+    background: #271717;
+    height: 50px;
+    position: relative;
+    top: -15px;
+}
+nav.navi > ul {
+    list-style-type: none;
+    padding-top: 15px;
+    padding-left: 134px;
+}
+nav.navi > ul > li {
+    display: inline-block;
+    width: 200px;
+}
+nav.navi > ul > li > a {
+    color: white;
+    text-decoration: none;
+}
+/* hover : 마우스를 댔을때 변하는 요소 */
+nav.navi a:hover {
+    text-shadow: 0px 2px 2px white;
+    color:yellow;
+}
+.content {
+    width: 700px;
+    float: left;
+    padding: 0 0 10px 10px;
+}
+.sidebar {
+    width: 200px;
+    float: right;
+    padding: 0 10px 0 0;
+}
+.sidebar img {
+    opacity: 0.5; /* opacity : 투명도 */
+}
+.sidebar img:hover {
+    opacity: 1;
+}
+footer {
+    clear: both;
+    text-align: center;
+    padding: 3px;
+    background-color: rgb(214, 213, 213);
+}
