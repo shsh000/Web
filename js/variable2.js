@@ -53,7 +53,8 @@ ary = [
 
 str = '<table border = 1>';
 for(let person of ary) {
-    str += '<tr><td>' + person['name'] + '</td>' + '<td>' +  person['age'] + '</td>'
+    str += '<tr><td>' + person['name'] + '</td>'
+           + '<td>' +  person['age'] + '</td>'
            + '<td>' + person['phone'] + '</td></tr>'; 
 }
 str += '</table>';
