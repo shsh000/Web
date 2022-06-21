@@ -9,14 +9,58 @@
 </head>
 
 <body>
+    <ul>
+        <li>Apple</li>
+        <li>Banana</li>
+        <li>Cherry</li>
+    </ul>
+    <div>
+        <h1>Cities</h1>
+        <ul>
+            <li id="one" class="red">Seoul</li>
+            <li id="two" class="red">London</li>
+            <li id="three" class="red">Newyork</li>
+            <li id="four">Tokyo</li>
+          </ul>
+    </div>
     <!-- <input type="file" id="selectFile" name="selectFile" accept="text/plain"> -->
-    <!-- script src : 외부 스크립트 -->
-    <script src="js/array_basic3.js"></script>
     
-    <!-- <button id="add">클릭</button>
+    <!-- script src : 외부 스크립트 -->
+    <!-- <script src="0621_js/array_method.js"></script> -->
+    
+    <button id="add1">클릭</button>
+    <button>클릭</button>
+
     <script>
+        let list = document.getElementsByTagName('li'); // HTMLCollection 타입
+        let detail = list[3];
+        // element, attribute, text => node
+        // DOM API(method(), 속성)
+        let attNode = detail.getAttribute('id');
+        let txtNode = detail.childNodes[0];
+
+        document.getElementById('add1');
+        add1.addEventListener('click', function() {
+            // element node 생성
+            let li = document.createElement('li');
+            li.innerHTML = '대구';
+            let ul = document.querySelector('div > ul');
+            ul.appendChild(li); // <ul><li>대구</li></ul>
+            console.log(li);
+        });
+
+        let btns = document.querySelectorAll('button'); // Nodelist 타입
+        btns[1].addEventListener('mouseover', function() {
+            document.querySelector('div > ul > li').remove();
+        })
+        console.log(btns[1]);
+        console.log(add1);
+            
+    </script>
+
+    <!-- <script>
         let btn = document.getElementById('add');
-        console.log(btn);
+        // console.log(btn);
         btn.addEventListener('click', function() {
             // alert('!!!!!!!!!!!');
             console.log(this); // window(x), object(x), eventTarget(o)
