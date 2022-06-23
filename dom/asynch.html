@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>asynch.html</title>
+    <script>
+        // 동기 vs 비동기
+        // setTimeout : 일정 시간 뒤 실행되도록 실행 지연
+        // 시간단위 ms (1000ms -> 1초) 
+
+        // 비동기방식
+        // setTimeout(function() {
+        // console.log('start');
+        // },2000);
+
+        // setTimeout(function() {
+        // console.log('mid');
+        // }, 1000);
+
+        // setTimeout(function() {
+        // console.log('end');
+        // }, 1500);
+
+        // 동기방식
+        // setTimeout(function () {
+        //     console.log('start');
+
+        //     setTimeout(function () {
+        //         console.log('mid');
+        //     }, 1000);
+
+        //     setTimeout(function () {
+        //         console.log('end');
+        //     }, 1500);
+
+        // }, 2000);
+
+        // AJAX(비동기처리) : Asynchronous Javascript And XML;
+        // 서버상에 있는 파일정보 읽기
+        let xhtp = new XMLHttpRequest(); // 비동기방식으로 처리하는 객체
+        xhtp.open('get', '../0620_js/dataset.xml'); // 요청방식, 요청URL이 매개값
+        xhtp.send();
+        xhtp.onload = loadCallBack; // on.. 속성은 이벤트와 관련된 속성
+
+        function loadCallBack() {
+            // console.log(xhtp.responseText); // responseText : 결과를 받아오는 속성
+            // document.write(xhtp.responseText);
+            // let data = JSON.parse(xhtp.responseText); // js에서 사용할 수 있는 object 타입으로 변경
+            // console.log(data);
+            console.log(this.responseXML); // this = xhtp 객체, xhtp가 어떤 값으로 바껴도 문제가 없도록
+            let doc = this.responseXML;
+            // let records = doc.getElementsByTagName('record'); -> forEach 사용 X
+            records = doc.querySelectorAll('record'); // NodeList
+            console.log(records[0].children[1].innerHTML);
+
+            let show = document.getElementById('show');
+            records.forEach(member => {
+                // console.log(member)
+                let str = '';
+                for (i = 0; i < member.children.length; i++) {
+                    str += member.children[i].innerHTML + " ";
+                }
+                console.log(str);
+                let li = document.createElement('li');
+                let txt = document.createTextNode(str);
+                li.appendChild(txt);
+                show.appendChild(li);
+                // member.children[0].innerHTML; // id
+                // member.children[1].innerHTML; // first_name
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <ul id="show">
+        <!-- <li>id, fn, ln, em, sal</li> -->
+    </ul>
+</body>
+
+</html>
