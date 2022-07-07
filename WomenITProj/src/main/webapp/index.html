@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>도서정보</title>
+<style>
+form > label {
+display : inline-block;
+width: 10%;
+background-color: lightgrey;
+text-align: center;
+}
+#show {
+text-align: center;
+}
+
+#show th {
+width: 150px;
+background-color: grey;
+color: white;
+}
+
+</style>
+</head>
+
+<body>
+<form action="book" name="bookForm">
+	<label for="bookCode">도서코드</label>
+	<input type="text" name="bookCode" id="bookCode"><br>
+
+	<label for="bookTitle">도서명</label>
+	<input type="text" name="bookTitle" id="bookTitle"><br>
+
+	<label for="writer">저자</label>
+	<input type="text" name="writer" id="writer"><br>
+
+	<label for="publisher">출판사</label>
+	<input type="text" name="publisher" id="publisher"><br>
+
+	<label for="price">금액</label>
+	<input type="number" name="price" id="price">
+	
+	<input type="submit" value="저장">
+	<input type="button" value="선택삭제" id="deleteSel">
+</form>
+
+	<div id="show">
+		<table border="1">
+			<thead>
+				<tr>
+					<th><input type="checkbox"></th>
+					<th>도서코드</th>
+					<th>도서명</th>
+					<th>저자</th>
+					<th>출판사</th>
+					<th>가격</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	
+	<script>
+	// 리스트 출력
+	let ajax = new XMLHttpRequest();
+	ajax.open('get', 'book?cmd=list');
+	ajax.send();
+	ajax.onload = function() {
+		let data = JSON.parse(this.responseText)
+		
+		let tbody = document.querySelector('#show tbody');
+		
+		data.forEach(book => {
+			tbody.append(makeTr(book));
+		})
+	}
+	
+	// 데이터 추가
+	document.forms.bookForm.addEventListener('submit', function(e) {
+		e.preventDefault();
+		let code = this.bookCode.value;
+		let title = this.bookTitle.value;
+		let writer = this.writer.value;
+		let publisher = this.publisher.value;
+		let price = this.price.value;
+		
+		let xhtp = new XMLHttpRequest();
+		xhtp.open('post', 'book');
+		xhtp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhtp.send(`bkCode=${code}&bkTitle=${title}&writer=${writer}&pub=${publisher}&price=${price}&cmd=add`);
+		xhtp.onload = function() {
+			let result = JSON.parse(this.responseText);
+			console.log(result);
+			document.querySelector('#show tbody').append(makeTr(result));
+		}
+	})
+	
+	let fields = ['bkCode', 'bkTitle', 'writer', 'pub', 'pr'];
+	
+	// 테이블 생성
+	function makeTr(book) {
+		let tr = document.createElement('tr');
+		tr.setAttribute('id', book.bkCode);
+		
+		// 체크 박스
+		let cb = document.createElement('input');
+		cb.setAttribute('type', 'checkbox');
+		let td = document.createElement('td');
+		td.append(cb);
+		tr.append(td);
+		
+		fields.forEach(field => {
+			let td = document.createElement('td');
+			td.innerHTML = book[field] ? book[field] : '';
+			tr.append(td);
+		})
+		
+		// 삭제 버튼
+		let btn = document.createElement('button');
+		btn.innerHTML = '삭제';
+		btn.addEventListener('click', rowDelete, false);
+		td = document.createElement('td');
+		td.append(btn);
+		tr.append(td);
+		
+		return tr;
+	}
+	
+	// 삭제
+	function rowDelete(e) {
+		let delId = this.parentElement.parentElement.getAttribute('id');
+		let delAjax = new XMLHttpRequest();
+		delAjax.open('post', 'book');
+		delAjax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		delAjax.send(`cmd=remove&delCode=${delId}`);
+		
+		delAjax.onload = function() {
+			let result = JSON.parse(delAjax.responseText);
+			
+			if(result.retCode == 'Success') {
+				document.getElementById(delId).remove();
+				alert('Success')
+			} else {
+				alert('처리 중 에러발생')
+			}
+		}
+	}
+	
+	// 선택 삭제
+	document.getElementById('deleteSel').addEventListener('click', deleteSelected);
+	
+	function deleteSelected() {
+		let ckAll = document.querySelectorAll('table > tbody > tr > input:checked');
+		
+		ckAll.forEach(elem => {
+			let delId = elem.parentElement.parentElement.getAttribute('id');
+			let selAjax = new XMLHttpRequest();
+			selAjax.open('post', 'book');
+			selAjax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			selAjax.send(`cmd=remove&delCode=${delId}`);
+			
+			selAjax.onload = function() {
+				let result = JSON.parse(selAjax.responseText);
+				
+				if(result.retCode == 'Success') {
+					document.getElementById(delId).remove();
+					alert('Success')
+				} else {
+					alert('처리 중 에러발생')
+				}
+			}
+		})
+	}
+	</script>
+	
+</body>
+
+</html>
